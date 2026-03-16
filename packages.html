@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Curated Packages - Global Horizons Travel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chatbot.css">
+    <script src="https://kit.fontawesome.com/4f3f4212e0.js" crossorigin="anonymous"></script>
+    <style>
+        .tag {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        /* Category Colors */
+        .tag.honeymoon {
+            background: #ff4d6d;
+        }
+
+        .tag.family {
+            background: #4cc9f0;
+        }
+
+        .tag.solo {
+            background: #7209b7;
+        }
+
+        .tag.wildlife {
+            background: #2b9348;
+        }
+
+        .tag.spiritual {
+            background: #f9c74f;
+            color: #333;
+        }
+
+        .tag.luxury {
+            background: #b79ced;
+        }
+
+        .tag.budget {
+            background: #52b788;
+        }
+
+        .tag.group {
+            background: #4361ee;
+        }
+
+        .tag.weekend {
+            background: #f72585;
+        }
+
+        .tag.cultural {
+            background: #fb5607;
+        }
+
+        .tag.educational {
+            background: #3a86ff;
+        }
+
+        .tag.corporate {
+            background: #003566;
+        }
+
+        .tag.cruise {
+            background: #00b4d8;
+        }
+
+        .tag.customized {
+            background: #3d5a80;
+        }
+
+        .package-item {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 4rem;
+            transition: transform 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .package-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .package-image-container {
+            position: relative;
+            height: 100%;
+            min-height: 400px;
+        }
+
+        .package-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .package-item .content {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .details-grid strong {
+            color: #022c43;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .details-grid ul {
+            padding-left: 1.2rem;
+            margin: 0;
+        }
+
+        .price-box {
+            background: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 4px solid #0a3d62;
+            margin-top: auto;
+        }
+
+        .price-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0a3d62;
+            display: block;
+        }
+
+        .inclusion-exclusion {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #ddd;
+            font-size: 0.85rem;
+        }
+
+        .inc {
+            color: #2d6a4f;
+        }
+
+        .exc {
+            color: #ae2012;
+        }
+
+        /* Customization Form Styles */
+        .custom-plan-form {
+            display: none;
+            background: #fdfdfd;
+            border: 2px solid #3d5a80;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 700;
+            color: #022c43;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .checkbox-group {
+            grid-column: span 2;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: #f0f4f8;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-build {
+            background: #3d5a80;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        .btn-build:hover {
+            background: #2b3d50;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 1000px) {
+            .package-item {
+                grid-template-columns: 1fr;
+            }
+
+            .package-image-container {
+                min-height: 300px;
+            }
+
+            .details-grid,
+            .inclusion-exclusion,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .checkbox-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="images/final_logo.png" alt="Global Horizon Tour" class="logo-img">
+            </a>
+        </div>
+        <div class="nav-links">
+            <div class="search-container">
+                <input type="text" id="dest-search" placeholder="Search destinations...">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="destinations.html">Destinations</a>
+            <a href="packages.html">Packages</a>
+            <a href="gallery.html">Gallery</a>
+            <div class="booking-dropdown">
+                <button class="dropbtn">Book now <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="booking.html"><i class="fas fa-plus-circle"></i> New Booking</a>
+                    <a href="ticket.html"><i class="fas fa-ticket-alt"></i> My Tickets</a>
+                </div>
+            </div>
+            <a href="contact.html">Contact</a>
+            <div class="user-dropdown">
+                <button class="user-icon-btn"><i class="fas fa-user-circle"></i></button>
+                <div class="dropdown-content">
+                    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="register.html"><i class="fas fa-user-plus"></i> Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header"
+        style="background: linear-gradient(rgba(2, 44, 67, 0.8), rgba(2, 44, 67, 0.8)), url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1935&auto=format&fit=crop'); background-size: cover; background-position: center; color: white; text-align: center; padding: 6rem 1rem;">
+        <div class="container">
+            <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Exclusive Travel Packages</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">14 Unique Travel Styles Curated for Your Perfect Escape</p>
+        </div>
+    </header>
+
+    <main class="container" style="padding-top: 4rem;">
+
+        <!-- 1. HONEYMOON -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="images/packages/honeymoon.jpg" alt="Honeymoon">
+            </div>
+            <div class="content">
+                <span class="tag honeymoon">Honeymoon</span>
+                <h2>Maldives Private Island Retreat</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong><i class="fas fa-calendar-alt"></i> Duration</strong> 5 Days / 4 Nights
+                        <strong><i class="fas fa-map-marker-alt"></i> Destination</strong> Maldives
+                        <strong><i class="fas fa-route"></i> Itinerary</strong>
+                        <ul>
+                            <li>Day 1: Speedboat transfer & Villa check-in</li>
+                            <li>Day 2: Private Sunset Cruise</li>
+                            <li>Day 3: In-villa Couple's Spa & Spa Session</li>
+                            <li>Day 4: Candlelight Beach Dinner</li>
+                            <li>Day 5: Island Hop & Departure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong><i class="fas fa-hotel"></i> Transport & Stay</strong>
+                        <p>Transport: Luxury Speedboat Transfers<br>Hotel: Overwater Villa with Infinity Pool</p>
+                        <strong><i class="fas fa-utensils"></i> Meals & Activities</strong>
+                        <p>Meals: All-inclusive Premium Dining<br>Activities: Scuba Diving, Photoshoot, Champagne
+                            Breakfast</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Speedboat, Welcome gift, 2 Spa sessions.</div>
+                    <div class="exc"><strong>Exclusions:</strong> International Flights, Visa.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 2,45,000 / Couple</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. FAMILY -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1770&auto=format&fit=crop"
+                    alt="Family">
+            </div>
+            <div class="content">
+                <span class="tag family">Family</span>
+                <h2>European Wonders Tour</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 10 Days / 9 Nights
+                        <strong>Destination</strong> Paris & Swiss Alps
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1-3: Disney World Paris</li>
+                            <li>Day 4-6: Swiss Chocolate Factory & Lucerne Lake</li>
+                            <li>Day 7-10: Mt. Titlis & Interlaken Adventure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Private Coach & EuroRail<br>Hotel: Family Suites in Multi-city Hotels</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Kid-friendly Buffet Meals<br>Activities: Cheese Tasting, Mountain Cable Cars</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Attraction Passes, Internal Travel.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Personal shopping, Extra meals.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 1,75,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. SOLO -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1773&auto=format&fit=crop"
+                    alt="Solo">
+            </div>
+            <div class="content">
+                <span class="tag solo">Solo</span>
+                <h2>Soul Journey - Bali, Indonesia</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 7 Days / 6 Nights
+                        <strong>Destination</strong> Ubud & Canggu
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1: Ubud Retreat Check-in</li>
+                            <li>Day 2: Morning Yoga & Rice Terrace Trek</li>
+                            <li>Day 3: Sacred Monkey Forest & Cooking Class</li>
+                            <li>Day 4-7: Canggu Beach & Surf Lessons</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Private Scooter/Driver<br>Hotel: Boutique Eco-Resort</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Healthy Breakfasts + Organic Lunches<br>Activities: Surfing, Meditation, Spa</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Yoga sessions, 1 Spa pass, SIM Card.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Flight tickets, Evening parties.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 65,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. WILDLIFE -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="images/packages/wildlife.png" alt="Wildlife">
+            </div>
+            <div class="content">
+                <span class="tag wildlife">Wildlife</span>
+                <h2>Masai Mara Safari Expedition</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 6 Days / 5 Nights
+                        <strong>Destination</strong> Kenya
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1: Nairobi to Masai Mara Air Transfer</li>
+                            <li>Day 2-4: Morning & Evening Game Drives</li>
+                            <li>Day 5: Hot Air Balloon Safari</li>
+                            <li>Day 6: Mara to Nairobi Departure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: 4x4 Safari Land Cruiser<br>Hotel: Luxury Tented Safari Camp</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Full Board (Bush Breakfast included)<br>Activities: Big Five Spotting, Village Visit
+                        </p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Park fees, Professional Ranger.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Tips, Alcoholic drinks.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 1,95,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. SPIRITUAL -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="images/packages/spiritual.png" alt="Spiritual">
+            </div>
+            <div class="content">
+                <span class="tag spiritual">Spiritual</span>
+                <h2>Ganges Bliss - Rishikesh & Varanasi</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 8 Days / 7 Nights
+                        <strong>Destination</strong> India
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1-3: Rishikesh Yoga & Ganga Aarti</li>
+                            <li>Day 4-5: Flight to Varanasi & Boat Ceremony</li>
+                            <li>Day 6-7: Sarnath Exploration & Temple Tour</li>
+                            <li>Day 8: Farewell & Departure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Private AC Sedan<br>Hotel: Heritage Ashrams & Boutique Hotels</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Satvik Vegetarian Meals Only<br>Activities: Boat Ride, Puja Rituals, Meditation</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Ritual fees, Guide, Internal Flight.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Personal donations, Snacks.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 45,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. LUXURY -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2070&auto=format&fit=crop"
+                    alt="Luxury">
+            </div>
+            <div class="content">
+                <span class="tag luxury">Luxury</span>
+                <h2>Royal Rajasthan Palace Living</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 7 Days / 6 Nights
+                        <strong>Destination</strong> Udaipur & Jodhpur
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1: Arrival at Taj Lake Palace</li>
+                            <li>Day 2: Private Lake Pichola Boat Tour</li>
+                            <li>Day 3: Vintage Car Drive & Palace Dinner</li>
+                            <li>Day 4-7: Umaid Bhawan Palace Stay & Fort Visit</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Chauffeur-driven Rolls Royce<br>Hotel: Ultra-luxury Grand Palaces</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Signature fine dining & Wine tasting<br>Activities: Private Musician Performance</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Airport Limo, 1 Royal Dinner.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Flights, Gratuity.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 3,50,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. BUDGET -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1770&auto=format&fit=crop"
+                    alt="Budget">
+            </div>
+            <div class="content">
+                <span class="tag budget">Budget</span>
+                <h2>Backpacker's Thailand Paradise</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 12 Days / 11 Nights
+                        <strong>Destination</strong> Bangkok & Phuket
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1-3: Bangkok Street Food & Temples</li>
+                            <li>Day 4: Overnight Train to South</li>
+                            <li>Day 5-10: Island Hopping & Jungle Trek</li>
+                            <li>Day 11-12: Beach Party & Departure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Local Bus, Train & Ferries<br>Hotel: Top-rated Social Hostels</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Street Food Tours + Local Cafe Breakfasts<br>Activities: Snorkeling, Kayaking</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Hostel stays, Group tours.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Alcohol, Flight, Tips.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 35,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. GROUP -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="images/packages/group.jpg" alt="Group">
+            </div>
+            <div class="content">
+                <span class="tag group">Group</span>
+                <h2>Dubai City Heights - Friends Group</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 5 Days / 4 Nights
+                        <strong>Destination</strong> Dubai
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1: Burj Khalifa visit & Fountain Show</li>
+                            <li>Day 2: Desert Safari with BBQ Dinner</li>
+                            <li>Day 3: Yacht Party in Dubai Marina</li>
+                            <li>Day 4: Museum of Future & Shopping</li>
+                            <li>Day 5: Water Park & Flight Back</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Private 14-Seater Mini Bus<br>Hotel: 4-star Executive Hotel Apartments</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Daily Breakfast + Safari Dinner<br>Activities: Yachting, Safari, Observation Deck</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Visa, Transfers, Yacht rental.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Personal Shopping, Insurance.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 72,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. WEEKEND -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?q=80&w=1932&auto=format&fit=crop"
+                    alt="Weekend">
+            </div>
+            <div class="content">
+                <span class="tag weekend">Weekend</span>
+                <h2>Hill Station Escape - Munnar</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 3 Days / 2 Nights
+                        <strong>Destination</strong> Kerala, India
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1: Tea Museum & Scenic Evening</li>
+                            <li>Day 2: Eravikulam Park & Waterfall Hike</li>
+                            <li>Day 3: Local Market & Departure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Individual AC Car<br>Hotel: Boutique Hillside Cottage</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Home-style Kerala Culinary<br>Activities: Plantation walk, Tea session</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Car, Sightseeing, Breakfast.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Entry Ticket fees, Lunch.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 12,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. CULTURAL -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="https://images.unsplash.com/photo-1506461883276-594a12b11cf3?q=80&w=2070&auto=format&fit=crop"
+                    alt="Cultural">
+            </div>
+            <div class="content">
+                <span class="tag cultural">Cultural</span>
+                <h2>Historical Heart - Kyoto & Tokyo</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 9 Days / 8 Nights
+                        <strong>Destination</strong> Japan
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1-4: Kyoto Temples & Gion Culture</li>
+                            <li>Day 5: Shinkansen Bullet Train to Tokyo</li>
+                            <li>Day 6-9: Tokyo History & Modern Art</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: JR Rail Pass & Private Guide<br>Hotel: Traditional Silk Ryokan Stays</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Kaiseki Dinners & Tea Ceremonies<br>Activities: Kimono Dressing, Samurai Lesson</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Shinkanshen, Guide, Kimono.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Flights, Visa.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 1,85,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. EDUCATIONAL -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="images/packages/educational.jpg" alt="Educational">
+            </div>
+            <div class="content">
+                <span class="tag educational">Educational</span>
+                <h2>STEM & Space - NASA USA Camp</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 12 Days / 11 Nights
+                        <strong>Destination</strong> Orlando & Washington
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1-5: Kennedy Space Center Camp</li>
+                            <li>Day 6-9: Smithsonian Museums Tour</li>
+                            <li>Day 10-12: University Campus Visits</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: University Shuttle & Coaches<br>Hotel: Campus Dorms & Student Hotels</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: All meals provided (Academic Style)<br>Activities: Astronaut Meet, Rocket Build</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> NASA Pass, Camp Gear, Meals.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Flight, Visa Fee.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 2,90,000 / Student</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. CORPORATE -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop"
+                    alt="Corporate">
+            </div>
+            <div class="content">
+                <span class="tag corporate">Corporate</span>
+                <h2>Mountain Retreat - Team Success</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 4 Days / 3 Nights
+                        <strong>Destination</strong> Alps or Himalayas
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1: Arrival & Opening Keynote</li>
+                            <li>Day 2: Team Building Outdoor Activities</li>
+                            <li>Day 3: Strategy Sessions & Gala Night</li>
+                            <li>Day 4: Network Brunch & Departure</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Executive Charter Luxury Coach<br>Hotel: 5-star Convention Resort</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Full Board Executive Buffet<br>Activities: Trekking, Workshops, Karaoke</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Event Space, AV Gear, Cocktail Night.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Individual Upgrades, Bar.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 55,000 / Delegate</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. CRUISE -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="https://images.unsplash.com/photo-1548574505-5e239809ee19?q=80&w=2003&auto=format&fit=crop"
+                    alt="Cruise">
+            </div>
+            <div class="content">
+                <span class="tag cruise">Cruise</span>
+                <h2>Antarctic Polar Expedition Cruise</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> 15 Days / 14 Nights
+                        <strong>Destination</strong> Antarctica
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>Day 1-2: Sail through Drake Passage</li>
+                            <li>Day 3-12: Zodiac Landing & Glacier Tours</li>
+                            <li>Day 13-15: Return sail to Ushuaia</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Ice-strengthened Vessel<br>Hotel: Luxury Ocean-view Cabin</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Gourmet International Cuisine<br>Activities: Kayaking, Wildlife Lectures</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Warm gear, Shore landings.</div>
+                    <div class="exc"><strong>Exclusions:</strong> Flights to Ushuaia, Drinks.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">₹ 8,75,000 / Person</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 14. CUSTOMIZED -->
+        <div class="package-item">
+            <div class="package-image-container">
+                <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=1887&auto=format&fit=crop"
+                    alt="Customized">
+            </div>
+            <div class="content">
+                <span class="tag customized">Customized</span>
+                <h2>Bespoke World Tour - Your Way</h2>
+                <div class="details-grid">
+                    <div>
+                        <strong>Duration</strong> Flexible
+                        <strong>Destination</strong> Worldwide Selection
+                        <strong>Itinerary</strong>
+                        <ul>
+                            <li>100% Custom Path</li>
+                            <li>Personalized Pace</li>
+                            <li>Curated Experiences only you want</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Transport & Stay</strong>
+                        <p>Transport: Private or Shared (Choice)<br>Hotel: Handpicked properties</p>
+                        <strong>Meals & Activities</strong>
+                        <p>Meals: Diet-specific curation<br>Activities: Personalized Interests</p>
+                    </div>
+                </div>
+                <div class="inclusion-exclusion">
+                    <div class="inc"><strong>Inclusions:</strong> Dedicated Travel Manager.</div>
+                    <div class="exc"><strong>Exclusions:</strong> To be defined in quote.</div>
+                </div>
+                <div class="price-box">
+                    <span class="price-value">Starting ₹ 50,000</span>
+                    <button class="btn-build" id="toggle-custom-form">
+                        <i class="fas fa-magic"></i> Build Your Own Plan Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customization Form Section -->
+        <div id="custom-plan-section" class="custom-plan-form">
+            <h2 style="text-align: center; color: #3d5a80; margin-bottom: 2rem;">Design Your Dream Escape</h2>
+            <form id="bespokeForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email / Mobile</label>
+                        <input type="text" placeholder="Where can we reach you?" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Destinations</label>
+                        <input type="text" placeholder="e.g. Switzerland, Italy, France">
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Start Date</label>
+                        <input type="date">
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Days</label>
+                        <input type="number" min="1" placeholder="e.g. 10">
+                    </div>
+                    <div class="form-group">
+                        <label>Adults Count</label>
+                        <input type="number" min="1" placeholder="Adults">
+                    </div>
+                    <div class="form-group">
+                        <label>Accommodation Preference</label>
+                        <select>
+                            <option>Standard (3 Star)</option>
+                            <option>Premium (4 Star)</option>
+                            <option>Luxury (5 Star)</option>
+                            <option>Ultra-Luxury / Palaces</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Total Budget (INR)</label>
+                        <input type="text" placeholder="e.g. ₹ 5,00,000">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <label style="width: 100%; margin-bottom: 0.5rem; font-weight: 700;">Interests & Vibe:</label>
+                        <div class="checkbox-item"><input type="checkbox"> Adventure</div>
+                        <div class="checkbox-item"><input type="checkbox"> Relaxation</div>
+                        <div class="checkbox-item"><input type="checkbox"> Food & Gastronomy</div>
+                        <div class="checkbox-item"><input type="checkbox"> Photography</div>
+                        <div class="checkbox-item"><input type="checkbox"> History & Culture</div>
+                        <div class="checkbox-item"><input type="checkbox"> Wildlife</div>
+                    </div>
+
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Tell us more about your vision</label>
+                        <textarea rows="4"
+                            placeholder="Mention any specific activities, dietary needs, or celebration details..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-build" style="background: #2d6a4f;">
+                    <i class="fas fa-paper-plane"></i> Submit My Plan Request
+                </button>
+            </form>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container text-center">
+            <p>&copy; 2025 Global Horizons Travel – Explore Beyond Borders</p>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+    <script src="js/packages.js"></script>
+    <script src="js/destinationData.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+
+</html>

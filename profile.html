@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile - Global Horizons Travel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/4f3f4212e0.js" crossorigin="anonymous"></script>
+    <style>
+        .profile-container {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .profile-header {
+            background: #fff;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .user-avatar {
+            width: 120px;
+            height: 120px;
+            background: var(--primary-color, #0a3d62);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .profile-info h1 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .profile-info p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .history-section h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        .history-card {
+            background: #fff;
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            align-items: center;
+            border-left: 5px solid #0a3d62;
+            transition: transform 0.3s;
+        }
+
+        .history-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .dest-name {
+            font-weight: 700;
+            color: #0a3d62;
+            font-size: 1.1rem;
+        }
+
+        .date-info {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .total-info {
+            font-weight: 600;
+            color: #27ae60;
+        }
+
+        .view-btn {
+            background: #f8f9fa;
+            color: #333;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid #ddd;
+        }
+
+        .view-btn:hover {
+            background: #0a3d62;
+            color: #fff;
+            border-color: #0a3d62;
+        }
+
+        .empty-history {
+            text-align: center;
+            padding: 4rem;
+            background: #fff;
+            border-radius: 20px;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="images/final_logo.png" alt="Global Horizon Tour" class="logo-img">
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="destinations.html">Destinations</a>
+            <a href="booking.html">Book now</a>
+            <a href="contact.html">Contact</a>
+            <div class="user-dropdown">
+                <button class="user-icon-btn"><i class="fas fa-user-circle"></i></button>
+                <div class="dropdown-content">
+                    <a href="profile.html" class="active"><i class="fas fa-id-card"></i> My Profile</a>
+                    <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="profile-container">
+        <div class="profile-header">
+            <div id="p-avatar" class="user-avatar">?</div>
+            <div class="profile-info">
+                <h1 id="p-name">Loading...</h1>
+                <p id="p-email">Loading...</p>
+                <span id="p-status"
+                    style="display:inline-block; margin-top:0.5rem; background:#e8f5e9; color:#2e7d32; padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:700; text-transform:uppercase;">Verified</span>
+            </div>
+        </div>
+
+        <div class="history-section">
+            <h2>Booking History</h2>
+            <div id="booking-history-list">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container text-center">
+            <p>&copy; 2025 Global Horizons Travel – Explore Beyond Borders</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Fill profile
+            document.getElementById('p-name').innerText = currentUser.name;
+            document.getElementById('p-email').innerText = currentUser.email;
+            document.getElementById('p-avatar').innerText = currentUser.name.charAt(0).toUpperCase();
+
+            // Load History
+            const histories = JSON.parse(localStorage.getItem('bookingHistories') || '{}');
+            const myHistory = histories[currentUser.email] || [];
+            const historyList = document.getElementById('booking-history-list');
+
+            if (myHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-history">
+                        <i class="fas fa-calendar-times" style="font-size:3rem; margin-bottom:1rem; display:block;"></i>
+                        <p>You haven't made any bookings yet.</p>
+                        <a href="booking.html" class="btn primary" style="display:inline-block; margin-top:1rem; background:#0a3d62; color:#fff; padding:0.6rem 1.5rem; border-radius:5px; text-decoration:none;">Start Planning</a>
+                    </div>`;
+            } else {
+                myHistory.forEach(booking => {
+                    const card = document.createElement('div');
+                    card.className = 'history-card';
+                    card.innerHTML = `
+                        <div>
+                            <div class="dest-name">${booking.dest}</div>
+                            <div class="date-info"><i class="far fa-calendar-alt"></i> ${booking.date}</div>
+                        </div>
+                        <div>
+                            <div class="label">Booking ID</div>
+                            <div class="value">${booking.id}</div>
+                        </div>
+                        <div>
+                            <div class="label">Total Price</div>
+                            <div class="total-info">${booking.total.toLocaleString()}</div>
+                        </div>
+                        <div>
+                            <a href="ticket.html" onclick="localStorage.setItem('latestBooking', JSON.stringify(${JSON.stringify(booking).replace(/"/g, '&quot;')}))" class="view-btn">View Ticket</a>
+                        </div>
+                    `;
+                    historyList.appendChild(card);
+                });
+            }
+
+            // Logout
+            document.getElementById('logout-btn').onclick = (e) => {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            };
+        });
+    </script>
+</body>
+
+</html>

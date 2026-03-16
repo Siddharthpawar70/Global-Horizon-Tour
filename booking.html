@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Book Your Journey - Global Horizons Travel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chatbot.css">
+    <script src="https://kit.fontawesome.com/4f3f4212e0.js" crossorigin="anonymous"></script>
+    <style>
+        .booking-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            background: var(--primary);
+            color: white;
+        }
+
+        .step-item {
+            flex: 1;
+            padding: 1.5rem;
+            text-align: center;
+            opacity: 0.4;
+            transition: var(--transition);
+            border-bottom: 4px solid transparent;
+            font-weight: 700;
+        }
+
+        .step-item.active {
+            opacity: 1;
+            border-bottom-color: var(--accent);
+        }
+
+        .booking-body {
+            padding: 3rem;
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+        }
+
+        .mode-option {
+            border: 2px solid #eee;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: #fdfdfd;
+        }
+
+        .mode-option i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .mode-option.active {
+            border-color: var(--accent);
+            background: rgba(243, 156, 18, 0.05);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .total-row {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            border: none;
+        }
+
+        #mode-specific-content {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="images/final_logo.png" alt="Global Horizon Tour" class="logo-img">
+            </a>
+        </div>
+        <div class="nav-links">
+            <div class="search-container">
+                <input type="text" id="dest-search" placeholder="Search destinations...">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="destinations.html">Destinations</a>
+            <a href="packages.html">Packages</a>
+            <a href="gallery.html">Gallery</a>
+            <div class="booking-dropdown">
+                <button class="dropbtn">Book now <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="booking.html" class="active"><i class="fas fa-plus-circle"></i> New Booking</a>
+                    <a href="ticket.html"><i class="fas fa-ticket-alt"></i> My Tickets</a>
+                </div>
+            </div>
+            <a href="contact.html">Contact</a>
+            <div class="user-dropdown">
+                <button class="user-icon-btn"><i class="fas fa-user-circle"></i></button>
+                <div class="dropdown-content">
+                    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="register.html"><i class="fas fa-user-plus"></i> Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header"
+        style="background: linear-gradient(rgba(2, 44, 67, 0.8), rgba(2, 44, 67, 0.8)), url('images/gallery/tour1.jpg'); background-size: cover; padding: 120px 0; color: white; text-align: center;">
+        <div class="container">
+            <h1>Start Your Legend</h1>
+            <p>Every great story begins with a single booking. Yours starts here.</p>
+        </div>
+    </header>
+
+    <main class="container" style="max-width: 1000px;">
+        <div class="booking-card">
+            <div class="step-indicator">
+                <div class="step-item active" data-step="1">1. Travelers</div>
+                <div class="step-item" data-step="2">2. Trip Details</div>
+                <div class="step-item" data-step="3">3. Review</div>
+            </div>
+
+            <form id="mainBookingForm" class="booking-body">
+                <!-- PHASE 1: BASIC TRAVELER INFO -->
+                <div class="form-section active" id="step1">
+                    <h2 style="margin-bottom: 2rem;">Basic Traveler Info</h2>
+                    <div class="grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="cust-name" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number</label>
+                            <input type="tel" id="cust-phone" class="form-control" placeholder="+91 98765 43210"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email (Optional)</label>
+                            <input type="email" id="cust-email" class="form-control" placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Travelers</label>
+                            <div style="display: flex; gap: 1rem;">
+                                <div style="flex: 1;">
+                                    <span
+                                        style="font-size: 0.8rem; color: #666; display: block; margin-bottom: 5px;">Adults
+                                        (12+)</span>
+                                    <input type="number" id="adult-count" class="form-control" value="1" min="1">
+                                </div>
+                                <div style="flex: 1;">
+                                    <span
+                                        style="font-size: 0.8rem; color: #666; display: block; margin-bottom: 5px;">Children
+                                        (2-12)</span>
+                                    <input type="number" id="child-count" class="form-control" value="0" min="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PHASE 2: TRIP DETAILS -->
+                <div class="form-section" id="step2">
+                    <h2 style="margin-bottom: 2rem;">Trip Details</h2>
+                    <div class="grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="form-group">
+                            <label>From Location</label>
+                            <input type="text" id="booking-from" class="form-control" placeholder="City or Station"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>To Location</label>
+                            <select id="booking-dest" class="form-control" required>
+                                <option value="" disabled selected>Select Destination...</option>
+                                <!-- Dynamically populated -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Travel Date</label>
+                            <input type="date" id="booking-date" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <label style="font-weight: 700; margin: 1.5rem 0 1rem; display: block;">Travel Mode</label>
+                    <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                        <div class="mode-option active" data-mode="flight">
+                            <i class="fas fa-plane"></i>
+                            <div>Flight</div>
+                        </div>
+                        <div class="mode-option" data-mode="train">
+                            <i class="fas fa-train"></i>
+                            <div>Train</div>
+                        </div>
+                        <div class="mode-option" data-mode="car">
+                            <i class="fas fa-car"></i>
+                            <div>Car / Bus</div>
+                        </div>
+                    </div>
+
+                    <div id="mode-specific-content">
+                        <!-- Content injected via JS -->
+                    </div>
+                </div>
+
+                <!-- PHASE 3: REVIEW & CONFIRM -->
+                <div class="form-section" id="step3">
+                    <h2 style="margin-bottom: 2rem;">Review & Confirm</h2>
+                    <div class="summary-box" style="background: var(--bg-light); padding: 2rem; border-radius: 15px;">
+                        <div class="summary-row"><span>Name:</span> <strong id="sum-name">-</strong></div>
+                        <div class="summary-row"><span>Route:</span> <strong id="sum-route">-</strong></div>
+                        <div class="summary-row"><span>Date:</span> <strong id="sum-date">-</strong></div>
+                        <div class="summary-row"><span>Travel Mode:</span> <strong id="sum-mode">-</strong></div>
+                        <div class="summary-row"><span>Travelers:</span> <strong id="sum-travelers">1 Adult</strong>
+                        </div>
+                        <div class="summary-row total-row"
+                            style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #ddd;">
+                            <span>Estimated Price:</span> <strong id="sum-total">₹ 0</strong>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <label style="font-weight: 700; display: block; margin-bottom: 1rem;">Payment Method</label>
+                        <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                            <label class="mode-option"
+                                style="padding: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <input type="radio" name="pay" value="upi" checked style="accent-color: var(--accent);">
+                                UPI
+                            </label>
+                            <label class="mode-option"
+                                style="padding: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <input type="radio" name="pay" value="card" style="accent-color: var(--accent);"> Card
+                            </label>
+                            <label class="mode-option"
+                                style="padding: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <input type="radio" name="pay" value="cash" style="accent-color: var(--accent);"> Cash
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NAVIGATION BUTTONS -->
+                <div style="display: flex; justify-content: space-between; margin-top: 3rem;">
+                    <button type="button" id="prevBtn" class="btn"
+                        style="background: #eee; border: none; padding: 1rem 2.5rem; border-radius: 10px; display: none;">Back</button>
+                    <button type="button" id="nextBtn" class="btn"
+                        style="background: var(--accent); color: var(--primary); font-weight: 800; border: none; padding: 1rem 2.5rem; border-radius: 10px; margin-left: auto;">Continue</button>
+                    <button type="submit" id="submitBtn" class="btn"
+                        style="background: #27ae60; color: white; font-weight: 800; border: none; padding: 1rem 2.5rem; border-radius: 10px; display: none; margin-left: auto;">Confirm
+                        Booking</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer" style="background: var(--primary); color: white; padding: 60px 0; text-align: center;">
+        <div class="container">
+            <p>© 2025 Global Horizons Travel – Premium Edition</p>
+            <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">Travel is an investment in yourself.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/destinationData.js"></script>
+    <script src="js/booking.js"></script>
+    <script src="js/chatbot.js"></script>
+</body>
+
+</html>
