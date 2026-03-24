@@ -82,6 +82,22 @@
                     </div>
                 </div>
 
+                
+                <div class="auth-group">
+                    <label>Country</label>
+                    <div class="auth-input-wrapper">
+                        <i class="fas fa-globe"></i>
+                        <select id="country-select" required>
+                            <option value="IN">India</option>
+                            <option value="US">United States</option>
+                            <option value="FR">France</option>
+                            <option value="DE">Germany</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="ES">Spain</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div style="margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 10px;">
                     <input type="checkbox" id="terms" required style="margin-top: 4px;">
                     <label for="terms" style="font-size: 0.8rem; color: var(--light-text);">I agree to the <a href="#"
@@ -106,6 +122,7 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
     <script src="js/register.js"></script>
 </body>
 

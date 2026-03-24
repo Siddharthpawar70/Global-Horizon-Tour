@@ -1,78 +1,40 @@
-// Registration Page Logic
 document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('registerForm');
+    if (!registerForm) return;
 
-    if (registerForm) {
-        registerForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+    registerForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-            const name = this.querySelector('input[placeholder="John Doe"]').value;
-            const email = this.querySelector('input[type="email"]').value;
-            const password = this.querySelectorAll('input[type="password"]')[0].value;
-            const confirmPassword = this.querySelectorAll('input[type="password"]')[1].value;
-            const terms = document.getElementById('terms');
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const name = this.querySelector('input[placeholder="John Doe"]').value.trim();
+        const email = this.querySelector('input[type="email"]').value.trim();
+        const password = this.querySelectorAll('input[type="password"]')[0].value;
+        const confirmPassword = this.querySelectorAll('input[type="password"]')[1].value;
+        const terms = document.getElementById('terms');
+        const countryCode = document.getElementById('country-select')?.value || 'IN';
 
-            // 1. Basic Validation
-            if (password !== confirmPassword) {
-                alert('Passwords do not match! Please try again.');
-                return;
-            }
+        if (password !== confirmPassword) return alert('Passwords do not match!');
+        if (!terms.checked) return alert('You must agree to the Terms of Service.');
 
-            if (!terms.checked) {
-                alert('You must agree to the Terms of Service.');
-                return;
-            }
+        const settings = window.GHTApi.countrySettings[countryCode] || { currency: 'INR', language: 'en' };
 
-            // 2. Registration Simulation
-            const newUser = {
-                name: name,
-                email: email,
-                password: password,
-                status: 'pending', // Requires admin approval
-                registeredAt: new Date().toLocaleString()
-            };
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Creating Account...';
 
-            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-
-            // Check if user already exists
-            if (users.find(u => u.email === email)) {
-                alert('An account with this email already exists.');
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Create My Account';
-                return;
-            }
-
-            users.push(newUser);
-            localStorage.setItem('registeredUsers', JSON.stringify(users));
-
-            // UI Feedback
-            const submitBtn = this.querySelector('button[type="submit"]');
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'Creating Account...';
-
-            setTimeout(() => {
-                alert(`Registration successful! Your account for ${email} is pending admin approval. You will be able to login once approved.`);
-
-                // Track registration count for Dashboard
-                const currentCount = parseInt(localStorage.getItem('registrationCount') || '0');
-                localStorage.setItem('registrationCount', currentCount + 1);
-
-                window.location.href = 'login.html';
-            }, 1200);
-        });
-    }
-
-    // Password strength indicator (Visual enhancement)
-    const passwordInput = document.querySelector('input[type="password"]');
-    if (passwordInput) {
-        passwordInput.addEventListener('input', function () {
-            if (this.value.length > 0 && this.value.length < 6) {
-                this.style.borderColor = '#e74c3c'; // Weak
-            } else if (this.value.length >= 6) {
-                this.style.borderColor = '#2ecc71'; // Good
-            } else {
-                this.style.borderColor = '';
-            }
-        });
-    }
+        try {
+            const res = await window.GHTApi.request('register.php', {
+                method: 'POST',
+                body: JSON.stringify({ name, email, password, countryCode, languageCode: settings.language })
+            });
+            localStorage.setItem('preferredCountry', countryCode);
+            localStorage.setItem('preferredCurrency', settings.currency);
+            localStorage.setItem('preferredLanguage', settings.language);
+            alert(`${res.message}. You can now login.`);
+            window.location.href = 'login.html';
+        } catch (error) {
+            alert(`Registration failed: ${error.message}`);
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Create My Account';
+        }
+    });
 });

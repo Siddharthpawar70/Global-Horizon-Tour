@@ -239,6 +239,20 @@
                                 <!-- Dynamically populated -->
                             </select>
                         </div>
+                        
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select id="country-select" class="form-control">
+                                <option value="IN">India</option><option value="US">United States</option><option value="FR">France</option><option value="DE">Germany</option><option value="GB">United Kingdom</option><option value="ES">Spain</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <select id="currency-select" class="form-control">
+                                <option value="INR">INR (₹)</option><option value="USD">USD ($)</option><option value="EUR">EUR (€)</option><option value="GBP">GBP (£)</option>
+                            </select>
+                        </div>
+
                         <div class="form-group">
                             <label>Travel Date</label>
                             <input type="date" id="booking-date" class="form-control" required>
@@ -283,7 +297,7 @@
                     </div>
 
                     <div style="margin-top: 2rem;">
-                        <label style="font-weight: 700; display: block; margin-bottom: 1rem;">Payment Method</label>
+                        <label id="payment-label" style="font-weight: 700; display: block; margin-bottom: 1rem;">Payment Method</label>
                         <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 1rem;">
                             <label class="mode-option"
                                 style="padding: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
@@ -324,6 +338,7 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
     <script src="js/destinationData.js"></script>
     <script src="js/booking.js"></script>
     <script src="js/chatbot.js"></script>

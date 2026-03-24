@@ -1,65 +1,27 @@
-const bookingData = JSON.parse(localStorage.getItem('latestBooking'));
-const ticketList = document.getElementById('ticket-list'); // This is the container
+(async () => {
+    const ticketList = document.getElementById('ticket-list');
+    const code = localStorage.getItem('latestBookingCode') || new URLSearchParams(window.location.search).get('booking');
 
-if (!bookingData) {
-    document.getElementById('no-booking').style.display = 'block';
-    document.getElementById('ticket-area').style.display = 'none';
-} else {
-    // Hide no booking message, show ticket area
-    document.getElementById('no-booking').style.display = 'none';
-    document.getElementById('ticket-area').style.display = 'block';
+    if (!code) {
+        document.getElementById('no-booking').style.display = 'block';
+        document.getElementById('ticket-area').style.display = 'none';
+        return;
+    }
 
-    // Update the success message area if present
-    if (document.getElementById('conf-email')) document.getElementById('conf-email').textContent = bookingData.email || '-';
-    if (document.getElementById('conf-mobile')) document.getElementById('conf-mobile').textContent = bookingData.mobile || '-';
+    try {
+        const res = await window.GHTApi.request(`receipt.php?booking_code=${encodeURIComponent(code)}`);
+        const b = res.booking;
+        const p = res.payment || {};
 
-    // Format Date
-    const travelDate = new Date(bookingData.date);
-    const formattedDate = travelDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('no-booking').style.display = 'none';
+        document.getElementById('ticket-area').style.display = 'block';
 
-    // Mode formatting
-    const modeDisplay = bookingData.mode.charAt(0).toUpperCase() + bookingData.mode.slice(1);
+        if (document.getElementById('conf-email')) document.getElementById('conf-email').textContent = b.user_email || '-';
+        if (document.getElementById('conf-mobile')) document.getElementById('conf-mobile').textContent = b.mobile || '-';
 
-    // Construct the Ticket HTML
-    const ticketHTML = `
-        <div class="ticket-card" style="flex-direction: column; padding: 2rem;">
-            <div class="ticket-header" style="text-align: center; border-bottom: 2px dashed #eee; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
-                <h2 style="font-size: 2rem; color: var(--primary);">Ticket Information (Demo)</h2>
-                <div style="color: #666; margin-top: 5px;">Booking ID: <strong>${bookingData.id}</strong></div>
-            </div>
-
-            <div class="ticket-grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
-                <!-- Row 1 -->
-                <div><span class="label">Name</span><span class="value">${bookingData.name}</span></div>
-                <div><span class="label">Mobile Number</span><span class="value">${bookingData.mobile}</span></div>
-
-                <!-- Row 2 -->
-                <div><span class="label">Email</span><span class="value">${bookingData.email || '-'}</span></div>
-                 <div><span class="label">Number of Travelers</span><span class="value">${bookingData.travelers}</span></div>
-
-                <!-- Row 3 -->
-                <div><span class="label">From</span><span class="value">${bookingData.from}</span></div>
-                <div><span class="label">To</span><span class="value">${bookingData.dest}</span></div>
-
-                <!-- Row 4 -->
-                <div><span class="label">Travel Date</span><span class="value">${formattedDate}</span></div>
-                <div><span class="label">Travel Mode</span><span class="value">${modeDisplay}</span></div>
-
-                <!-- Row 5 -->
-                <div><span class="label">Vehicle / Airline</span><span class="value">${bookingData.details || '-'}</span></div>
-                <div><span class="label">Payment Method</span><span class="value">${bookingData.payment}</span></div>
-                
-                 <!-- Row 6 -->
-                <div><span class="label">Estimated Price</span><span class="value" style="color: var(--accent); font-size: 1.2rem;">₹ ${bookingData.total ? bookingData.total.toLocaleString() : '0'}</span></div>
-                <div><span class="label">Booking Status</span><span class="value" style="color: #27ae60;">Confirmed (Demo)</span></div>
-            </div>
-
-            <div style="margin-top: 2rem; text-align: center;">
-                <div class="barcode"></div>
-                <small>This is a computer generated invalid ticket for demonstration.</small>
-            </div>
-        </div>
-    `;
-
-    ticketList.innerHTML = ticketHTML;
-}
+        ticketList.innerHTML = `<div class="ticket-card" style="flex-direction:column;padding:2rem;"><div class="ticket-header" style="text-align:center;border-bottom:2px dashed #eee;padding-bottom:1.5rem;margin-bottom:1.5rem;"><h2 style="font-size:2rem;color:var(--primary);">Ticket Information</h2><div style="color:#666;margin-top:5px;">Booking ID: <strong>${b.booking_code}</strong></div></div><div class="ticket-grid" style="grid-template-columns:1fr 1fr;gap:2rem;"><div><span class="label">Name</span><span class="value">${b.customer_name}</span></div><div><span class="label">Mobile Number</span><span class="value">${b.mobile}</span></div><div><span class="label">Email</span><span class="value">${b.user_email || '-'}</span></div><div><span class="label">Travelers</span><span class="value">${b.travelers}</span></div><div><span class="label">From</span><span class="value">${b.source_location}</span></div><div><span class="label">To</span><span class="value">${b.destination}</span></div><div><span class="label">Travel Date</span><span class="value">${b.travel_date}</span></div><div><span class="label">Mode</span><span class="value">${b.travel_mode}</span></div><div><span class="label">Payment Method</span><span class="value">${b.payment_method}</span></div><div><span class="label">Amount</span><span class="value" style="color:var(--accent);font-size:1.2rem;">${b.currency_code} ${Number(b.total_amount).toLocaleString()}</span></div><div><span class="label">Transaction ID</span><span class="value">${p.transaction_id || '-'}</span></div><div><span class="label">Status</span><span class="value" style="color:#27ae60;">${b.booking_status}</span></div></div></div>`;
+    } catch {
+        document.getElementById('no-booking').style.display = 'block';
+        document.getElementById('ticket-area').style.display = 'none';
+    }
+})();
